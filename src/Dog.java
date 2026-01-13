@@ -1,23 +1,33 @@
 
+import java.util.Objects;
+
 public class Dog {
 
     private String name;
     private String breed;
     private int age;
     private int weight;
-    private double tailLength;
+    // private double tailLength;
     private Owner owner;
 
+    // public Dog(String name, String breed, int age, int weight) {
+    //     this.name = name;
+    //     this.breed = breed;
+    //     this.age = age;
+    //     this.weight = weight;
+    // }
+    // public Dog(String name, String breed, int age, int weight, Owner owner) {
+    //     this.name = name;
+    //     this.breed = breed;
+    //     this.age = age;
+    //     this.weight = weight;
+    //     setOwner(owner);
+    // }
     public Dog(String name, String breed, int age, int weight) {
         this.name = formatString(name);
         this.breed = formatString(breed);
         this.age = formatInt(age);
         this.weight = formatInt(weight);
-        if (this.breed.equals("Tax") || this.breed.equals("Dachshund")) {
-            tailLength = 3.7;
-        } else {
-            updateTailLength();
-        }
     }
 
     public Dog(String name, String breed, int age, int weight, Owner owner) {
@@ -25,11 +35,6 @@ public class Dog {
         this.breed = formatString(breed);
         this.age = formatInt(age);
         this.weight = formatInt(weight);
-        if (this.breed.equals("Tax") || this.breed.equals("Dachshund")) {
-            tailLength = 3.7;
-        } else {
-            updateTailLength();
-        }
         setOwner(owner);
     }
 
@@ -43,7 +48,6 @@ public class Dog {
         } else {
             throw new IllegalArgumentException(input + "är inte ett IllegalArgumentException eller ett NullPointerException");
         }
-
     }
 
     private int formatInt(int input) {
@@ -62,9 +66,13 @@ public class Dog {
         return age;
     }
 
-    public void updateAge(int newAge) {
-        if (newAge > age) {
-            age = newAge;
+    public void updateAge(int addedAge) {
+        if (addedAge == Integer.MAX_VALUE || ((long) age + (long) addedAge) >= Integer.MAX_VALUE) {
+            age = Integer.MAX_VALUE;
+            return;
+        }
+        if (addedAge > 0) {
+            age = age + addedAge;
         }
     }
 
@@ -72,8 +80,12 @@ public class Dog {
         return weight;
     }
 
-    private void updateTailLength() {
-        tailLength = (double) (age * weight) / 10;
+    public double getTailLength() {
+        if (this.breed.equals("Tax") || this.breed.equals("Dachshund")) {
+            return 3.7;
+        } else {
+            return (double) (age * weight) / 10;
+        }
     }
 
     public Owner getOwner() {
@@ -81,12 +93,21 @@ public class Dog {
     }
 
     public boolean setOwner(Owner owner) {
-        boolean result = false;
-        return result;
+        if (!Objects.equals(this.owner, owner)) {
+            this.owner = owner;
+            return true;
+        }
+        return false;
     }
 
     public boolean setOwner() {
-        boolean result = false;
-        return result;
+        owner = null;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        String dogInfo = "Namn: " + getName() + " Ras: " + getBreed() + " Ålder: " + getAge() + " Vikt (Kg): " + getWeight() + " Svanslängd: " + getTailLength();
+        return "Namn: " + getName() + " Ras: " + getBreed() + " Ålder: " + getAge() + " Vikt (Kg): " + getWeight() + " Svanslängd: " + getTailLength();
     }
 }
