@@ -65,16 +65,23 @@ public class Owner {
     }
 
     public boolean addDog(Dog dog) {
-        if (!ownsDog(dog.getName())) {
-            int index = 0;
-            for (Dog d : dogs) {
-                if (d == null) {
-                    dogs[index] = dog;
-                    return true;
+        if (!ownsMaxDogs()) {
+            {
+                if (!ownsDog(dog.getName())) {
+                    int index = 0;
+                    for (Dog d : dogs) {
+                        if (d == null) {
+                            if (!this.equals(dog.getOwner())) {
+                                dog.setOwner(this);
+                            }
+                            dogs[index] = dog;
+                            return true;
+                        }
+                        index++;
+                    }
+                    return false;
                 }
-                index++;
             }
-            return false;
         }
         return false;
     }
@@ -83,8 +90,10 @@ public class Owner {
         int i = 0;
         for (Dog d : dogs) {
             if (d != null) {
-                // if (Objects.equals(d.getName(), name)) {
                 if (d.getName().equalsIgnoreCase(name)) {
+                    if (this.getName().equalsIgnoreCase(d.getOwner().getName())) {
+                        dogs[i].setOwner();
+                    }
                     dogs[i] = null;
                     return true;
                 }
@@ -98,6 +107,9 @@ public class Owner {
         int i = 0;
         for (Dog d : dogs) {
             if (Objects.equals(d, dog)) {
+                if (this.equals(dog.getOwner())) {
+                    dog.setOwner();
+                }
                 dogs[i] = null;
                 return true;
             }

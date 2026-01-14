@@ -1,6 +1,4 @@
 
-import java.util.Objects;
-
 public class Dog {
 
     private String name;
@@ -79,23 +77,48 @@ public class Dog {
     }
 
     public boolean setOwner(Owner owner) {
-        if (!Objects.equals(this.owner, owner)) {
+        if (owner == null) {
+            this.owner.removeDog(this);
+            this.owner = null;
+            return true;
+        }
+        if (owner.ownsMaxDogs()) {
+            return false;
+        }
+        if (this.owner == null) {
             this.owner = owner;
+            owner.addDog(this);
+            return true;
+        } else if (!this.owner.equals(owner)) {
+            this.owner.removeDog(this);
+            this.owner = owner;
+            owner.addDog(this);
+            return true;
+        } else if (owner.ownsDog(this)) {
+            return false;
+        } else {
+            owner.addDog(this);
+            return true;
+        }
+    }
+
+    public boolean setOwner() {
+        if (owner != null) {
+            owner = null;
             return true;
         }
         return false;
     }
 
-    public boolean setOwner() {
-        owner = null;
-        return true;
-    }
-
     @Override
     public String toString() {
-        String dogInfo
-                = "Owner: " + getOwner().getName()
-                + "Namn: " + getName()
+        String dogInfo = "";
+        if (this.getOwner() != null) {
+            dogInfo
+                    += "Owner: " + getOwner().getName();
+        }
+        dogInfo
+                += "Namn: " + getName()
                 + " Ras: " + getBreed()
                 + " Ålder: " + getAge()
                 + " Vikt (Kg): " + getWeight()
