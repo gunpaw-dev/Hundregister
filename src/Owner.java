@@ -6,13 +6,10 @@ public class Owner {
 
     private String name;
     private Dog[] dogs;
-    private int dogIndex;
-    private int dogMax;
 
     public Owner(String name, Dog... dogs) {
         this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
         this.dogs = new Dog[7];
-        dogIndex = 0;
         if (dogs.length != 0) {
             for (Dog d : dogs) {
                 addDog(d);
@@ -44,6 +41,26 @@ public class Owner {
             }
             DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), copy);
             return copy;
+        }
+    }
+
+    public String getDogNames() {
+        if (!ownsAnyDog()) {
+            return "";
+        } else {
+            String dogNames = "";
+            boolean firstDog = true;
+            for (Dog d : dogs) {
+                if (d != null) {
+                    if (!firstDog) {
+                        dogNames += ", ";
+                    }
+
+                    dogNames += d.getName();
+                    firstDog = false;
+                }
+            }
+            return dogNames;
         }
     }
 
@@ -128,15 +145,8 @@ public class Owner {
         return false;
     }
 
-    // private String formatString(String input) {
-    //     if (input != null && !input.isEmpty() && !input.equals("")) {
-    //         return input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-    //     } else {
-    //         throw new IllegalArgumentException(input + "är inte ett IllegalArgumentException eller ett NullPointerException");
-    //     }
-    // }
     @Override
     public String toString() {
-        return "Owner: " + name;
+        return "Owner: " + name + getDogNames();
     }
 }

@@ -7,22 +7,8 @@ public class Dog {
     private String breed;
     private int age;
     private int weight;
-    // private double tailLength;
     private Owner owner;
 
-    // public Dog(String name, String breed, int age, int weight) {
-    //     this.name = name;
-    //     this.breed = breed;
-    //     this.age = age;
-    //     this.weight = weight;
-    // }
-    // public Dog(String name, String breed, int age, int weight, Owner owner) {
-    //     this.name = name;
-    //     this.breed = breed;
-    //     this.age = age;
-    //     this.weight = weight;
-    //     setOwner(owner);
-    // }
     public Dog(String name, String breed, int age, int weight) {
         this.name = formatString(name);
         this.breed = formatString(breed);
@@ -107,7 +93,13 @@ public class Dog {
 
     @Override
     public String toString() {
-        String dogInfo = "Namn: " + getName() + " Ras: " + getBreed() + " Ålder: " + getAge() + " Vikt (Kg): " + getWeight() + " Svanslängd: " + getTailLength();
-        return "Namn: " + getName() + " Ras: " + getBreed() + " Ålder: " + getAge() + " Vikt (Kg): " + getWeight() + " Svanslängd: " + getTailLength();
+        String dogInfo
+                = "Owner: " + getOwner().getName()
+                + "Namn: " + getName()
+                + " Ras: " + getBreed()
+                + " Ålder: " + getAge()
+                + " Vikt (Kg): " + getWeight()
+                + " Svanslängd: " + getTailLength();
+        return dogInfo;
     }
 }
