@@ -6,10 +6,11 @@ public class Owner {
 
     private String name;
     private Dog[] dogs;
+    private static final int MAX_DOGS = 7;
 
     public Owner(String name, Dog... dogs) {
         this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-        this.dogs = new Dog[7];
+        this.dogs = new Dog[MAX_DOGS];
         if (dogs.length != 0) {
             for (Dog d : dogs) {
                 addDog(d);
@@ -42,6 +43,17 @@ public class Owner {
             DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), copy);
             return copy;
         }
+    }
+
+    public Dog getDog(String dogName) {
+        for (Dog d : dogs) {
+            if (d != null) {
+                if (d.getName().equalsIgnoreCase(dogName)) {
+                    return d;
+                }
+            }
+        }
+        return null;
     }
 
     public String getDogNames() {

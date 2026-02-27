@@ -25,7 +25,7 @@ public class InputReader {
         while (!success) {
             String userInput = scanner.nextLine().trim();
             if (userInput.isEmpty() || userInput.isBlank()) {
-                System.out.print("Error: must not be empty or blank?]");
+                System.out.print("Error: must not be empty or blank");
             } else {
                 textInput = userInput;
                 success = true;
