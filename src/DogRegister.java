@@ -1,14 +1,12 @@
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
-import java.util.Collections;
-import javax.lang.model.util.ElementScanner14;
 
 public class DogRegister {
 
     private static boolean exit = false;
-    private ArrayList<String> commands = new ArrayList<String>();
     private InputReader input = new InputReader(new Scanner(System.in));
     private OwnerCollection collection = new OwnerCollection();
 
@@ -134,12 +132,22 @@ public class DogRegister {
     }
 
     public void listOwners() {
-        ArrayList<String> owners = new ArrayList<>();
+        collection.getAllOwners().sort(Comparator.comparing(Owner::getName));
         if (collection.size() > 0) {
             for (Owner owner : collection.getAllOwners()) {
-                owners.add(owner.getName());
+                println(owner.getName() + ", Dogs: ");
+                for (Dog dog : owner.getDogs()) {
+                    boolean first = true;
+                    if (dog != null) {
+                        if (first) {
+                            print(dog.getName());
+                            first = false;
+                        } else {
+                            print(", " + dog.getName());
+                        }
+                    }
+                }
             }
-            printList(owners);
         } else {
             println("There are no owners.");
         }
@@ -148,13 +156,13 @@ public class DogRegister {
     public void listDogs() {
         double minTailLegth = input.readInt("What is the minimum tail length of the dogs you want listed?");
         boolean dogFound = false;
-        ArrayList<Dog> dogs = new ArrayList<>();
+        ArrayList<Dog> tempDogs = new ArrayList<>();
         if (collectionHasDog()) {
             for (Owner owner : collection.getAllOwners()) {
                 for (Dog dog : owner.getDogs()) {
                     if (dog != null) {
                         if (dog.getTailLength() >= minTailLegth) {
-                            dogs.add(dog);
+                            tempDogs.add(dog);
                             dogFound = true;
                         }
                     }
@@ -163,8 +171,15 @@ public class DogRegister {
             if (!dogFound) {
                 println("No dogs over that tail length are registered.");
             } else {
-                DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), dogs);
-                dogs.toString();
+                DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), tempDogs);
+                for (Dog dog : tempDogs) {
+                    println(
+                            "Name: " + dog.getName()
+                            + ", Breed: " + dog.getBreed()
+                            + ", Age: " + dog.getAge()
+                            + ", Weight: " + dog.getWeight()
+                            + ", Tail Length: " + dog.getTailLength());
+                }
             }
         } else {
             println("There are no dogs.");
@@ -172,6 +187,17 @@ public class DogRegister {
     }
 
     public void increaseAge() {
+        if (collectionHasDog()) {
+            for (Owner owner : collection.getAllOwners()) {
+                for (Dog dog : owner.getDogs()) {
+                    if (dog != null) {
+                        dog.updateAge(1);
+                    }
+                }
+            }
+        } else {
+            println("No dogs are registered.");
+        }
     }
 
     public void getCommads() {
