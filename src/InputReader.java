@@ -15,7 +15,7 @@ public class InputReader {
     }
 
     public InputReader() {
-        this(new Scanner(System.in)); //Anropar den andra konstruktorn som tar en Scanner.
+        this(new Scanner(System.in)); //"this" anropar den andra konstruktorn som tar en Scanner.
     }
 
     public String readString(String text) {
