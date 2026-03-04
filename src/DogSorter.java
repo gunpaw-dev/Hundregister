@@ -7,21 +7,7 @@ public class DogSorter {
     private DogSorter() {
     }
 
-    ;
     public static void sort(SortingAlgorithm algorithm, Comparator<Dog> comparator, Dog... dogs) {
-
-        switch (algorithm) {
-            case BUBBLE_SORT:
-                bubbleSort(comparator, dogs);
-                break;
-            case SELECTION_SORT:
-                selectionSort(comparator, dogs);
-                break;
-        }
-
-    }
-
-    public static void sort(SortingAlgorithm algorithm, Comparator<Dog> comparator, ArrayList<Dog> dogs) {
 
         switch (algorithm) {
             case BUBBLE_SORT:

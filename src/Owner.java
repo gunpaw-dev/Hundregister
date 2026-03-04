@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Owner {
 
+    private static final int MAX_DOGS = 7;
     private String name;
     private Dog[] dogs;
-    private static final int MAX_DOGS = 7;
 
     public Owner(String name, Dog... dogs) {
         this.name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
@@ -56,7 +56,7 @@ public class Owner {
         return null;
     }
 
-    public String getDogNames() {
+    private String getDogNames() {
         if (!ownsAnyDog()) {
             return "";
         } else {
@@ -104,7 +104,7 @@ public class Owner {
             if (d != null) {
                 if (d.getName().equalsIgnoreCase(name)) {
                     if (this.getName().equalsIgnoreCase(d.getOwner().getName())) {
-                        dogs[i].setOwner();
+                        dogs[i].setOwner(null);
                     }
                     dogs[i] = null;
                     return true;
@@ -120,7 +120,7 @@ public class Owner {
         for (Dog d : dogs) {
             if (Objects.equals(d, dog)) {
                 if (this.equals(dog.getOwner())) {
-                    dog.setOwner();
+                    dog.setOwner(null);
                 }
                 dogs[i] = null;
                 return true;

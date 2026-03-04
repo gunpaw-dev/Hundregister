@@ -1,6 +1,7 @@
 
 public class Dog {
 
+    private static final double DACHSHUND_TAIL_LENGTH = 3.7f;
     private String name;
     private String breed;
     private int age;
@@ -66,7 +67,7 @@ public class Dog {
 
     public double getTailLength() {
         if (this.breed.equals("Tax") || this.breed.equals("Dachshund")) {
-            return 3.7;
+            return DACHSHUND_TAIL_LENGTH;
         } else {
             return (double) (age * weight) / 10;
         }
@@ -77,9 +78,10 @@ public class Dog {
     }
 
     public boolean setOwner(Owner owner) {
-        if (owner == null) {
-            this.owner.removeDog(this);
-            this.owner = null;
+        if (owner == null && this.owner != null) {
+            Owner storedOwner = this.owner;
+            this.owner = owner;
+            storedOwner.removeDog(this);
             return true;
         }
         if (owner.ownsMaxDogs()) {
@@ -100,14 +102,6 @@ public class Dog {
             owner.addDog(this);
             return true;
         }
-    }
-
-    public boolean setOwner() {
-        if (owner != null) {
-            owner = null;
-            return true;
-        }
-        return false;
     }
 
     @Override

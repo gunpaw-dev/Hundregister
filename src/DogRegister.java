@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class DogRegister {
 
-    private static boolean exit = false;
+    private static final String EXIT_COMMAND = "EXIT";
     private InputReader input = new InputReader(new Scanner(System.in));
     private OwnerCollection collection = new OwnerCollection();
 
@@ -18,7 +18,7 @@ public class DogRegister {
     public void startProgram() {
         println("--------------------------------Welcome to THE dog register!-------------------------------");
         showCommands();
-        program();
+        commandLoop();
     }
 
     public void showCommands() {
@@ -34,10 +34,14 @@ public class DogRegister {
         println(" - Exit");
     }
 
-    public void program() {
-        while (!exit) {
-            checkForCommand(input.readString("Enter command"));
-        }
+    public void commandLoop() {
+        String command = "";
+        do {
+            command = input.readString("Enter command");
+            checkForCommand(command);
+        } while (!command.equals(EXIT_COMMAND));
+        System.out.println("Dog Register has been shut down.");
+
     }
 
     public void addOwner() {
@@ -171,7 +175,9 @@ public class DogRegister {
             if (!dogFound) {
                 println("No dogs over that tail length are registered.");
             } else {
-                DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), tempDogs);
+                Dog[] sortedDogs = new Dog[tempDogs.size()];
+                sortedDogs = tempDogs.toArray(sortedDogs);
+                DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), sortedDogs);
                 for (Dog dog : tempDogs) {
                     println(
                             "Name: " + dog.getName()
@@ -200,15 +206,8 @@ public class DogRegister {
         }
     }
 
-    public void getCommads() {
-    }
-
-    public void exit() {
-        exit = true;
-    }
-
-    public void checkForCommand(String string) {
-        String command = string.toUpperCase().trim().replace(" ", "_");
+    public void checkForCommand(String command) {
+        command = command.toUpperCase().trim().replace(" ", "_");
         switch (command) {
             case "ADD_OWNER", "AO":
                 addOwner();
@@ -234,15 +233,11 @@ public class DogRegister {
             case "INCREASE_AGE", "IA":
                 increaseAge();
                 break;
-            case "GET_COMMANDS", "GA":
-                getCommads();
-                break;
             case "EXIT":
-                exit();
+                // No code because this just exits the program, just exists a case since there is an enum for it type shit.
                 break;
             default:
-                println(command + " is not a valid command.\nUse 'Get commands' OR 'GA' to see the availible commands.");
-                break;
+                System.out.println("Command not recognized.");
         }
     }
 

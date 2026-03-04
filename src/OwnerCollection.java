@@ -6,10 +6,6 @@ public class OwnerCollection {
 
     private ArrayList<Owner> owners;
 
-    public OwnerCollection(ArrayList<Owner> owners) {
-        this.owners = owners;
-    }
-
     public OwnerCollection() {
         this.owners = new ArrayList<Owner>();
     }

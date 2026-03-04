@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public class InputReader {
 
+    private static boolean isInstantiated;
     private Scanner scanner;
-    private static boolean isInstantiated = false;
 
     public InputReader(Scanner scanner) {
         this.scanner = scanner;
@@ -25,7 +25,9 @@ public class InputReader {
         while (!success) {
             String userInput = scanner.nextLine().trim();
             if (userInput.isEmpty() || userInput.isBlank()) {
-                System.out.print("Error: must not be empty or blank");
+                printErrorText("must not be empty or blank.");
+                printText(text);
+                continue;
             } else {
                 textInput = userInput;
                 success = true;
@@ -39,20 +41,24 @@ public class InputReader {
         double doubleInput = -1.0;
         printText(text);
         while (!success) {
-            if (scanner.hasNextDouble()) {
+            if (!scanner.hasNextDouble()) {
+                printErrorText("must be a number.");
+                scanner.nextLine();
+                continue;
+            } else {
                 doubleInput = scanner.nextDouble();
                 scanner.nextLine();
-            } else {
-                System.out.print("Error: must be a number.");
             }
+
             if (doubleInput < 0) {
-                System.out.print("Error: must not be negative.");
+                printErrorText("must not be negative.");
+                continue;
             } else {
                 success = true;
             }
-            scanner.reset();
         }
         return doubleInput;
+
     }
 
     public int readInt(String text) {
@@ -60,19 +66,24 @@ public class InputReader {
         int intInput = -1;
         printText(text);
         while (!success) {
-            if (scanner.hasNextInt()) {
+            if (!scanner.hasNextInt()) {
+                printErrorText("must be a number.");
+                printText(text);
+                scanner.nextLine();
+                continue;
+            } else {
                 intInput = scanner.nextInt();
                 scanner.nextLine();
-            } else {
-                System.out.print("Error: must be a number.");
             }
+
             if (intInput < 0) {
-                System.out.print("Error, must not be negative.");
+                printErrorText("must not be negative.");
+                printText(text);
+                continue;
             } else {
                 success = true;
             }
         }
-        scanner.reset();
         return intInput;
     }
 
@@ -80,4 +91,11 @@ public class InputReader {
         System.out.print(text + "?>");
     }
 
+    private void printErrorText(String text) {
+        System.out.println("Error: " + text);
+    }
+
+    public void close() {
+        scanner.close();
+    }
 }
