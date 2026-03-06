@@ -27,7 +27,6 @@ public class InputReader {
             if (userInput.isEmpty() || userInput.isBlank()) {
                 printErrorText("must not be empty or blank.");
                 printText(text);
-                continue;
             } else {
                 textInput = userInput;
                 success = true;
@@ -52,7 +51,6 @@ public class InputReader {
 
             if (doubleInput < 0) {
                 printErrorText("must not be negative.");
-                continue;
             } else {
                 success = true;
             }
@@ -79,7 +77,6 @@ public class InputReader {
             if (intInput < 0) {
                 printErrorText("must not be negative.");
                 printText(text);
-                continue;
             } else {
                 success = true;
             }

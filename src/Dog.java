@@ -2,6 +2,7 @@
 public class Dog {
 
     private static final double DACHSHUND_TAIL_LENGTH = 3.7f;
+    private static final double TAIL_LENGTH_DIVISOR = 10.0f;
     private String name;
     private String breed;
     private int age;
@@ -25,22 +26,6 @@ public class Dog {
 
     public String getName() {
         return name;
-    }
-
-    private String formatString(String input) {
-        if (input != null && !input.isEmpty() && !input.equals("")) {
-            return input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-        } else {
-            throw new IllegalArgumentException(input + "är inte ett IllegalArgumentException eller ett NullPointerException");
-        }
-    }
-
-    private int formatInt(int input) {
-        if (input < 0) {
-            throw new IllegalArgumentException(input + "är ett negativt nummer");
-        } else {
-            return input;
-        }
     }
 
     public String getBreed() {
@@ -69,7 +54,7 @@ public class Dog {
         if (this.breed.equals("Tax") || this.breed.equals("Dachshund")) {
             return DACHSHUND_TAIL_LENGTH;
         } else {
-            return (double) (age * weight) / 10;
+            return (double) (age * weight) / TAIL_LENGTH_DIVISOR;
         }
     }
 
@@ -101,6 +86,22 @@ public class Dog {
         } else {
             owner.addDog(this);
             return true;
+        }
+    }
+
+    private String formatString(String input) {
+        if (input != null && !input.isEmpty() && !input.equals("")) {
+            return input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        } else {
+            throw new IllegalArgumentException(input + "är inte ett IllegalArgumentException eller ett NullPointerException");
+        }
+    }
+
+    private int formatInt(int input) {
+        if (input < 0) {
+            throw new IllegalArgumentException(input + "är ett negativt nummer");
+        } else {
+            return input;
         }
     }
 

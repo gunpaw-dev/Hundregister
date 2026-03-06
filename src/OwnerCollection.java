@@ -7,7 +7,7 @@ public class OwnerCollection {
     private ArrayList<Owner> owners;
 
     public OwnerCollection() {
-        this.owners = new ArrayList<Owner>();
+        this.owners = new ArrayList<>();
     }
 
     public boolean addOwner(Owner owner) {

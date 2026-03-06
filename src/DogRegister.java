@@ -15,13 +15,13 @@ public class DogRegister {
         dr.startProgram();
     }
 
-    public void startProgram() {
+    private void startProgram() {
         println("--------------------------------Welcome to THE dog register!-------------------------------");
         showCommands();
         commandLoop();
     }
 
-    public void showCommands() {
+    private void showCommands() {
         println(" - Add owner      (AO)");
         println(" - Remove owner   (RO)");
         println(" - Add dog        (AD)");
@@ -34,7 +34,7 @@ public class DogRegister {
         println(" - Exit");
     }
 
-    public void commandLoop() {
+    private void commandLoop() {
         String command = "";
         do {
             command = input.readString("Enter command");
@@ -44,7 +44,7 @@ public class DogRegister {
 
     }
 
-    public void addOwner() {
+    private void addOwner() {
         String ownerName = formatString(input.readString("Enter the name of the new owner"));
         if (!collection.containsOwner(ownerName)) {
             collection.addOwner(new Owner(ownerName));
@@ -54,7 +54,7 @@ public class DogRegister {
         }
     }
 
-    public void removeOwner() {
+    private void removeOwner() {
         String ownerName = formatString(input.readString("Enter the name of the owner you want to remove"));
         if (collection.size() <= 0) {
             println("There are no current registered owners");
@@ -68,7 +68,7 @@ public class DogRegister {
         }
     }
 
-    public void addDog() {
+    private void addDog() {
         if (collection.size() > 0) {
             String ownerName = input.readString("Enter the name of the dogs owner");
             if (collection.getOwner(ownerName) != null && !collection.getOwner(ownerName).ownsMaxDogs()) {
@@ -89,7 +89,7 @@ public class DogRegister {
         }
     }
 
-    public void removeDog() {
+    private void removeDog() {
         if (collectionHasDog()) {
             String ownerName = input.readString("Enter the name of the dogs owner");
             if (collection.getOwner(ownerName) != null) {
@@ -109,7 +109,7 @@ public class DogRegister {
         }
     }
 
-    public void changeOwner() {
+    private void changeOwner() {
         if (collection.size() > 1 && collectionHasDog()) {
             String oldOwnerName = input.readString("Enter the name of the dogs owner");
             if (collection.getOwner(oldOwnerName) != null) {
@@ -135,8 +135,7 @@ public class DogRegister {
         }
     }
 
-    public void listOwners() {
-        collection.getAllOwners().sort(Comparator.comparing(Owner::getName));
+    private void listOwners() {
         if (collection.size() > 0) {
             for (Owner owner : collection.getAllOwners()) {
                 println(owner.getName() + ", Dogs: ");
@@ -157,7 +156,7 @@ public class DogRegister {
         }
     }
 
-    public void listDogs() {
+    private void listDogs() {
         double minTailLegth = input.readInt("What is the minimum tail length of the dogs you want listed?");
         boolean dogFound = false;
         ArrayList<Dog> tempDogs = new ArrayList<>();
@@ -177,7 +176,7 @@ public class DogRegister {
             } else {
                 Dog[] sortedDogs = new Dog[tempDogs.size()];
                 sortedDogs = tempDogs.toArray(sortedDogs);
-                DogSorter.sort(SortingAlgorithm.BUBBLE_SORT, Comparator.comparing(Dog::getName), sortedDogs);
+                DogSorter.sort(SortingAlgorithm.SELECTION_SORT, Comparator.comparing(Dog::getTailLength), sortedDogs);
                 for (Dog dog : tempDogs) {
                     println(
                             "Name: " + dog.getName()
@@ -192,7 +191,7 @@ public class DogRegister {
         }
     }
 
-    public void increaseAge() {
+    private void increaseAge() {
         if (collectionHasDog()) {
             for (Owner owner : collection.getAllOwners()) {
                 for (Dog dog : owner.getDogs()) {
@@ -206,7 +205,7 @@ public class DogRegister {
         }
     }
 
-    public void checkForCommand(String command) {
+    private void checkForCommand(String command) {
         command = command.toUpperCase().trim().replace(" ", "_");
         switch (command) {
             case "ADD_OWNER", "AO":
@@ -241,15 +240,7 @@ public class DogRegister {
         }
     }
 
-    private String formatString(String input) {
-        if (input != null && !input.isEmpty()) {
-            return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
-        } else {
-            throw new IllegalArgumentException(input + " är ett IllegalArgumentException eller ett NullPointerException");
-        }
-    }
-
-    public boolean collectionHasDog() {
+    private boolean collectionHasDog() {
         for (Owner owner : collection.getAllOwners()) {
             if (owner.ownsAnyDog()) {
                 return true;
@@ -258,15 +249,15 @@ public class DogRegister {
         return false;
     }
 
-    public void print(String string) {
+    private void print(String string) {
         System.out.print(string);
     }
 
-    public void println(String string) {
+    private void println(String string) {
         System.out.println(string);
     }
 
-    public void printList(ArrayList<String> strings) {
+    private void printList(ArrayList<String> strings) {
         Collections.sort(strings);
         String output = "";
         boolean first = true;
@@ -280,5 +271,13 @@ public class DogRegister {
             }
         }
         println(output);
+    }
+
+    private String formatString(String input) {
+        if (input != null && !input.isEmpty()) {
+            return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+        } else {
+            throw new IllegalArgumentException(input + " är ett IllegalArgumentException eller ett NullPointerException");
+        }
     }
 }
