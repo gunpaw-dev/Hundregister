@@ -69,69 +69,64 @@ public class DogRegister {
     }
 
     private void addDog() {
-        if (collection.size() > 0) {
-            String ownerName = input.readString("Enter the name of the dogs owner");
-            if (collection.getOwner(ownerName) != null && !collection.getOwner(ownerName).ownsMaxDogs()) {
-                String dogName = "";
-                collection.getOwner(ownerName).addDog(new Dog(
-                        dogName = formatString(input.readString("What is the dog named")),
-                        input.readString("What breed is the dog"),
-                        input.readInt("How old is the dog"),
-                        input.readInt("How much does the dog weight")
-                ));
-                println("The dog " + dogName + " was added to the owner " + formatString(ownerName) + ".");
-            } else {
-                println("The owner does not exist or has the maximum amount of dogs.");
-            }
-
-        } else {
+        if (collection.size() <= 0) {
             println("There are no owners within our database.");
+            return;
+        }
+        String ownerName = input.readString("Enter the name of the dogs owner");
+        if (collection.getOwner(ownerName) != null && !collection.getOwner(ownerName).ownsMaxDogs()) {
+            String dogName = "";
+            collection.getOwner(ownerName).addDog(new Dog(
+                    dogName = formatString(input.readString("What is the dog named")),
+                    input.readString("What breed is the dog"),
+                    input.readInt("How old is the dog"),
+                    input.readInt("How much does the dog weight")
+            ));
+            println("The dog " + dogName + " was added to the owner " + formatString(ownerName) + ".");
+        } else {
+            println("The owner does not exist or has the maximum amount of dogs.");
         }
     }
 
     private void removeDog() {
-        if (collectionHasDog()) {
-            String ownerName = input.readString("Enter the name of the dogs owner");
-            if (collection.getOwner(ownerName) != null) {
-                String dogName = input.readString("Enter the name of the dog you want to remove from " + ownerName);
-                if (collection.getOwner(ownerName).getDog(dogName) != null) {
-                    collection.getOwner(ownerName).removeDog(dogName);
-                    println("The dog " + formatString(dogName) + " was removed from " + formatString(ownerName) + ".");
-                } else {
-                    println("The dog " + formatString(dogName) + " could not be found as a dog of " + formatString(ownerName) + ".");
-                }
-            } else {
-                println("Could not find " + ownerName + " within our database.");
-            }
-
-        } else {
+        if (!collectionHasDog()) {
             println("There are no dogs within our database.");
+            return;
+        }
+        String ownerName = input.readString("Enter the name of the dogs owner");
+        if (!findOwner(ownerName)) {
+            return;
+        }
+        String dogName = input.readString("Enter the name of the dog you want to remove from " + ownerName);
+        if (collection.getOwner(ownerName).getDog(dogName) != null) {
+            collection.getOwner(ownerName).removeDog(dogName);
+            println("The dog " + formatString(dogName) + " was removed from " + formatString(ownerName) + ".");
+        } else {
+            println("The dog " + formatString(dogName) + " could not be found as a dog of " + formatString(ownerName) + ".");
         }
     }
 
     private void changeOwner() {
-        if (collection.size() > 1 && collectionHasDog()) {
-            String oldOwnerName = input.readString("Enter the name of the dogs owner");
-            if (collection.getOwner(oldOwnerName) != null) {
-                if (collection.getOwner(oldOwnerName).ownsAnyDog()) {
-                    String dogName = input.readString("Enter the name of the dog you want to change from " + oldOwnerName + " to a new owner");
-                    if (collection.getOwner(oldOwnerName).ownsDog(dogName)) {
-                        String newOwnerName = input.readString("Enter the name of the dogs new owner");
-                        if (collection.getOwner(newOwnerName) != null && !collection.getOwner(newOwnerName).ownsMaxDogs() && collection.getOwner(newOwnerName) != collection.getOwner(oldOwnerName)) {
-                            collection.getOwner(newOwnerName).addDog(collection.getOwner(oldOwnerName).getDog(dogName));
-                            println("The dog " + formatString(dogName) + " was changed from " + oldOwnerName + " to " + formatString(newOwnerName) + ".");
-                        }
-                    } else {
-                        println(dogName + " is not registered to " + oldOwnerName + ".");
-                    }
-                } else {
-                    println("Owner did not have any dogs registered to them.");
-                }
-            } else {
-                println("Owner was not found within our database.");
+        if (!collectionHasOwnerAmount(2) && !collectionHasDog()) {
+            return;
+        }
+        String oldOwnerName = input.readString("Enter the name of the dogs owner");
+        if (!findOwner(oldOwnerName)) {
+            return;
+        }
+        if (!collection.getOwner(oldOwnerName).ownsAnyDog()) {
+            println("Owner did not have any dogs registered to them.");
+            return;
+        }
+        String dogName = input.readString("Enter the name of the dog you want to change from " + oldOwnerName + " to a new owner");
+        if (collection.getOwner(oldOwnerName).ownsDog(dogName)) {
+            String newOwnerName = input.readString("Enter the name of the dogs new owner");
+            if (collection.getOwner(newOwnerName) != null && !collection.getOwner(newOwnerName).ownsMaxDogs() && collection.getOwner(newOwnerName) != collection.getOwner(oldOwnerName)) {
+                collection.getOwner(newOwnerName).addDog(collection.getOwner(oldOwnerName).getDog(dogName));
+                println("The dog " + formatString(dogName) + " was changed from " + oldOwnerName + " to " + formatString(newOwnerName) + ".");
             }
         } else {
-            println("There are not enough owners and/or dogs within our database.");
+            println(dogName + " is not registered to " + oldOwnerName + ".");
         }
     }
 
@@ -243,9 +238,34 @@ public class DogRegister {
     private boolean collectionHasDog() {
         for (Owner owner : collection.getAllOwners()) {
             if (owner.ownsAnyDog()) {
+                println("There are no dogs within the register.");
                 return true;
             }
         }
+        return false;
+    }
+
+    private boolean collectionHasOwner() {
+        if (collection.size() > 0) {
+            return true;
+        }
+        println("There are no owners within the register.");
+        return false;
+    }
+
+    private boolean collectionHasOwnerAmount(int number) {
+        if (collection.size() >= number) {
+            return true;
+        }
+        println("There are not enough owners within the register.");
+        return false;
+    }
+
+    private boolean findOwner(String owner) {
+        if (collection.getOwner(owner) != null) {
+            return true;
+        }
+        println("The owner " + owner + " could not be found within our register.");
         return false;
     }
 
