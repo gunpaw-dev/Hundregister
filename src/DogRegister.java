@@ -69,8 +69,7 @@ public class DogRegister {
     }
 
     private void addDog() {
-        if (collection.size() <= 0) {
-            println("There are no owners within our database.");
+        if (!collectionHasOwner()) {
             return;
         }
         String ownerName = input.readString("Enter the name of the dogs owner");
